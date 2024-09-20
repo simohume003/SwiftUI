@@ -1,0 +1,129 @@
+//
+//  ContentView.swift
+//  Weather
+//
+//  Created by Simon Hume on 17/07/2024.
+//
+
+import SwiftUI
+
+struct ContentView: View {
+    
+    @State private var isNight = false
+    
+    var body: some View {
+        ZStack {
+            BackroundView(isNight:isNight)
+            VStack{
+                CityTextView(cityName: "Dublin , IE")
+                
+                MainWeatherStatusView(imagename:  isNight ? "moon.stars.fill" : "cloud.sun.fill", temp: 19)
+                    
+                HStack(spacing : 20){
+                    WeatherDayView( dayofWeek: "TUE",
+                                    imageName: "cloud.sun.fill",
+                                    temp: 25)
+                    
+                    WeatherDayView( dayofWeek: "WED",
+                                    imageName: "cloud.heavyrain.fill",
+                                    temp: 12)
+                    
+                    
+                    WeatherDayView( dayofWeek: "THU",
+                                    imageName: "cloud.fill",
+                                    temp: 16)
+                    
+                    
+                    WeatherDayView( dayofWeek: "FRI",
+                                    imageName: "cloud.sun.fill",
+                                    temp: 20)
+                    
+                    WeatherDayView( dayofWeek: "SAT",
+                                    imageName: "sun.max.fill",
+                                    temp: 28)
+                    }
+                    
+                    Spacer()
+                    
+                Button {
+                    isNight.toggle()
+                } label:{
+                    ButtonCDT(title: isNight ? "Change Day Time Mode" :"Change Night Time Mode", textColor: .blue, backroundColor:  isNight ? .yellow : .white) // own tweaking
+                    
+                }
+                Spacer()
+                
+            }
+        }
+    }
+}
+
+ #Preview {
+    ContentView()
+}
+
+struct WeatherDayView: View{
+    var dayofWeek: String
+    var imageName: String
+    var temp : Int
+    var body: some View {
+        VStack{
+            Text(dayofWeek)
+                .font(.system(size: 16 , weight: .medium , design:.default))
+                .foregroundColor(.white)
+            Image(systemName: imageName)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio( contentMode: .fit)
+                .frame(width:40 , height: 40)
+            Text("\(temp)°")
+                .font(.system(size: 28 , weight: .medium , design:.default))
+                .foregroundColor(.white)
+        }
+    }
+}
+
+struct BackroundView: View {
+    var isNight : Bool
+    
+    var body: some View {
+       // LinearGradient(gradient: Gradient(colors : [ isNight ? .black : .blue  , isNight ? .gray : Color("Lb")]),
+        //               startPoint: .topLeading, endPoint: .bottomTrailing)
+        //.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/) // old stle
+        ContainerRelativeShape()
+            .fill( isNight ? Color.black.gradient : Color.blue.gradient)
+            .ignoresSafeArea() // new style 
+    }
+}
+
+struct CityTextView: View {
+    var cityName : String
+    
+    var body: some View {
+        Text(cityName)
+            .font(.system(size: 32 , weight: .medium , design:.default))
+            .foregroundColor(.white)
+            .padding()
+    }
+}
+
+struct MainWeatherStatusView: View {
+    var imagename : String
+    var temp : Int
+    
+    var body: some View {
+        VStack(spacing: 8){
+            Image(systemName: imagename)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio( contentMode: .fit)
+                .frame(width:180 , height: 180)
+            Text("\(temp)°C")
+                .font(.system(size: 70 , weight: .medium , design:.default))
+                .foregroundColor(.white)
+        }
+        .padding(.bottom, 40)
+    }
+}
+
+
